@@ -1,1575 +1,1137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VidShrynk – Compress Videos Instantly, Free</title>
-  <meta name="description" content="VidShrynk: The smartest browser-based video compressor. Reduce file size by up to 90% without quality loss. No uploads, 100% private, free forever."/>
-  <meta name="keywords" content="video compressor, compress video online, reduce video size, free video compressor, browser video compression"/>
-  <meta property="og:title" content="VidShrynk – Compress Videos Instantly"/>
-  <meta property="og:description" content="Compress videos up to 90% smaller — no uploads, no servers, 100% in your browser."/>
-  <meta property="og:type" content="website"/>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
-
-  <!-- Google AdSense — replace ca-pub-XXXXXXXXXX with your real publisher ID -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-
-  <style>
-    :root {
-      --bg: #08090d;
-      --surface: #111218;
-      --surface2: #181920;
-      --border: rgba(255,255,255,0.07);
-      --accent: #7fff6b;
-      --accent2: #38ffe8;
-      --accent3: #ff6b6b;
-      --text: #f0f0ef;
-      --muted: #7a7a8a;
-      --radius: 16px;
-      --radius-sm: 10px;
-      --font-display: 'Syne', sans-serif;
-      --font-body: 'DM Sans', sans-serif;
-      --glow: 0 0 40px rgba(127,255,107,0.18);
-      --glow2: 0 0 60px rgba(56,255,232,0.12);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 16px;
-      line-height: 1.6;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ── BACKGROUND NOISE + GRID ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        radial-gradient(ellipse 60% 50% at 20% 10%, rgba(127,255,107,0.06) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(56,255,232,0.05) 0%, transparent 60%),
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-      background-size: cover, cover, 200px 200px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 48px;
-      background: rgba(8,9,13,0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .logo {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .logo span {
-      color: var(--accent);
-      text-shadow: 0 0 20px rgba(127,255,107,0.5);
-    }
-
-    .nav-badge {
-      background: rgba(127,255,107,0.1);
-      border: 1px solid rgba(127,255,107,0.25);
-      color: var(--accent);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      padding: 4px 10px;
-      border-radius: 50px;
-      text-transform: uppercase;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 90px 24px 60px;
-    }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent2);
-      background: rgba(56,255,232,0.06);
-      border: 1px solid rgba(56,255,232,0.15);
-      padding: 6px 16px;
-      border-radius: 50px;
-      margin-bottom: 28px;
-    }
-
-    .hero-eyebrow::before {
-      content: '';
-      width: 6px; height: 6px;
-      background: var(--accent2);
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.7); }
-    }
-
-    h1 {
-      font-family: var(--font-display);
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
-      font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
-    }
-
-    h1 .line2 {
-      display: block;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-image: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-      filter: drop-shadow(0 0 30px rgba(127,255,107,0.3));
-    }
-
-    .hero-sub {
-      max-width: 520px;
-      margin: 0 auto 48px;
-      color: var(--muted);
-      font-size: 1.1rem;
-      font-weight: 300;
-    }
-
-    .stats-row {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      margin-bottom: 56px;
-    }
-
-    .stat {
-      text-align: center;
-    }
-
-    .stat-val {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    .stat-label {
-      font-size: 0.78rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-    }
-
-    /* ── AD BANNER (top) ── */
-    .ad-banner {
-      position: relative;
-      z-index: 1;
-      max-width: 728px;
-      margin: 0 auto 52px;
-      text-align: center;
-    }
-
-    .ad-label {
-      font-size: 0.65rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      margin-bottom: 6px;
-    }
-
-    .ad-slot {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-      min-height: 90px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* ── MAIN COMPRESSOR CARD ── */
-    .card {
-      position: relative;
-      z-index: 1;
-      max-width: 820px;
-      margin: 0 auto 60px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 48px;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.5), var(--glow);
-    }
-
-    /* ── DROP ZONE ── */
-    #dropZone {
-      border: 2px dashed rgba(127,255,107,0.25);
-      border-radius: var(--radius);
-      padding: 60px 40px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background: rgba(127,255,107,0.02);
-      position: relative;
-      overflow: hidden;
-    }
-
-    #dropZone::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      background: linear-gradient(135deg, rgba(127,255,107,0.05), transparent, rgba(56,255,232,0.05));
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    #dropZone:hover::before,
-    #dropZone.drag-over::before { opacity: 1; }
-
-    #dropZone:hover,
-    #dropZone.drag-over {
-      border-color: rgba(127,255,107,0.6);
-      background: rgba(127,255,107,0.04);
-      transform: scale(1.005);
-    }
-
-    .drop-icon {
-      width: 72px; height: 72px;
-      margin: 0 auto 20px;
-      background: linear-gradient(135deg, rgba(127,255,107,0.15), rgba(56,255,232,0.1));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      animation: float 4s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-
-    .drop-title {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .drop-sub {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .drop-sub strong { color: var(--accent); cursor: pointer; }
-    .drop-sub strong:hover { text-decoration: underline; }
-
-    .format-pills {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 18px;
-    }
-
-    .pill {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      padding: 3px 12px;
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-
-    #fileInput { display: none; }
-
-    /* ── SETTINGS PANEL (hidden until file loaded) ── */
-    #settingsPanel { display: none; }
-    #settingsPanel.active { display: block; }
-
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 36px 0;
-    }
-
-    .settings-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    @media (max-width: 600px) {
-      .settings-grid { grid-template-columns: 1fr; }
-      nav { padding: 14px 20px; }
-      .card { padding: 28px 20px; margin: 0 16px 60px; }
-      h1 { font-size: 2.4rem; }
-      .stats-row { gap: 24px; }
-    }
-
-    .field-label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .field-label span { color: var(--accent); font-family: var(--font-display); font-size: 0.95rem; }
-
-    input[type="range"] {
-      -webkit-appearance: none;
-      width: 100%;
-      height: 4px;
-      border-radius: 4px;
-      background: rgba(255,255,255,0.08);
-      outline: none;
-      cursor: pointer;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 10px rgba(127,255,107,0.5);
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-
-    select, .select-styled {
-      width: 100%;
-      padding: 12px 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 0.95rem;
-      cursor: pointer;
-      outline: none;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237a7a8a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      transition: border-color 0.2s;
-    }
-
-    select:focus { border-color: rgba(127,255,107,0.4); }
-
-    /* ── FILE INFO ── */
-    #fileInfo {
-      display: none;
-      background: rgba(127,255,107,0.05);
-      border: 1px solid rgba(127,255,107,0.15);
-      border-radius: var(--radius-sm);
-      padding: 16px 20px;
-      margin-bottom: 28px;
-    }
-
-    #fileInfo.active { display: flex; align-items: center; gap: 14px; }
-
-    .file-icon { font-size: 1.8rem; }
-
-    .file-meta { flex: 1; }
-
-    .file-name {
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 2px;
-      color: var(--text);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .file-size { font-size: 0.8rem; color: var(--muted); }
-
-    .remove-btn {
-      background: rgba(255,107,107,0.1);
-      border: 1px solid rgba(255,107,107,0.2);
-      color: var(--accent3);
-      border-radius: 8px;
-      padding: 6px 14px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .remove-btn:hover { background: rgba(255,107,107,0.2); }
-
-    /* ── VIDEO PREVIEW ── */
-    #previewWrap {
-      display: none;
-      margin-bottom: 28px;
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: #000;
-      text-align: center;
-    }
-
-    #previewWrap.active { display: block; }
-
-    #videoPreview {
-      max-width: 100%;
-      max-height: 260px;
-      display: block;
-      margin: 0 auto;
-    }
-
-    /* ── PROGRESS ── */
-    #progressWrap {
-      display: none;
-      margin-top: 28px;
-    }
-
-    #progressWrap.active { display: block; }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    .progress-track {
-      height: 6px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      height: 100%;
-      border-radius: 6px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      width: 0%;
-      transition: width 0.3s ease;
-      box-shadow: 0 0 12px rgba(127,255,107,0.4);
-    }
-
-    .progress-step {
-      margin-top: 12px;
-      font-size: 0.82rem;
-      color: var(--accent2);
-      font-style: italic;
-    }
-
-    /* ── OUTPUT ── */
-    #outputWrap {
-      display: none;
-      margin-top: 28px;
-    }
-
-    #outputWrap.active { display: block; }
-
-    .output-box {
-      background: rgba(127,255,107,0.04);
-      border: 1px solid rgba(127,255,107,0.2);
-      border-radius: var(--radius);
-      padding: 28px;
-      text-align: center;
-    }
-
-    .output-title {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
-
-    .size-compare {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      margin: 20px 0;
-      flex-wrap: wrap;
-    }
-
-    .size-box {
-      text-align: center;
-    }
-
-    .size-val {
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      font-weight: 800;
-    }
-
-    .size-val.original { color: var(--muted); }
-    .size-val.compressed { color: var(--accent); }
-
-    .size-lbl { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
-
-    .arrow-icon { font-size: 1.4rem; color: var(--accent2); }
-
-    .savings-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #000;
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 1.1rem;
-      padding: 6px 20px;
-      border-radius: 50px;
-      margin: 8px 0 20px;
-    }
-
-    /* ── BUTTONS ── */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 32px;
-      border-radius: var(--radius-sm);
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-      transition: all 0.25s ease;
-      text-decoration: none;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), #5fe04e);
-      color: #000;
-      box-shadow: 0 4px 30px rgba(127,255,107,0.3);
-      width: 100%;
-      justify-content: center;
-      font-size: 1.05rem;
-      padding: 16px 32px;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 40px rgba(127,255,107,0.45);
-    }
-
-    .btn-primary:active { transform: translateY(0); }
-
-    .btn-primary:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .btn-download {
-      background: linear-gradient(135deg, var(--accent2), #2dd9c5);
-      color: #000;
-      box-shadow: 0 4px 24px rgba(56,255,232,0.25);
-    }
-
-    .btn-download:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(56,255,232,0.4); }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-      margin-left: 10px;
-    }
-
-    .btn-outline:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.04); }
-
-    .btn-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
-
-    /* ── FEATURES ── */
-    .features {
-      position: relative;
-      z-index: 1;
-      max-width: 1100px;
-      margin: 0 auto 80px;
-      padding: 0 24px;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 52px;
-    }
-
-    .section-tag {
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent2);
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .feature-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 30px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(127,255,107,0.3), transparent);
-      transform: scaleX(0);
-      transition: transform 0.4s ease;
-    }
-
-    .feature-card:hover::before { transform: scaleX(1); }
-
-    .feature-card:hover {
-      border-color: rgba(127,255,107,0.15);
-      transform: translateY(-3px);
-    }
-
-    .feature-icon {
-      width: 48px; height: 48px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 18px;
-    }
-
-    .feature-icon.green { background: rgba(127,255,107,0.12); }
-    .feature-icon.cyan { background: rgba(56,255,232,0.1); }
-    .feature-icon.red { background: rgba(255,107,107,0.1); }
-    .feature-icon.purple { background: rgba(180,100,255,0.1); }
-    .feature-icon.orange { background: rgba(255,180,60,0.1); }
-    .feature-icon.blue { background: rgba(80,140,255,0.1); }
-
-    .feature-title {
-      font-family: var(--font-display);
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .feature-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
-
-    /* ── AD SIDEBAR / INLINE ── */
-    .ad-section {
-      position: relative;
-      z-index: 1;
-      max-width: 820px;
-      margin: 0 auto 60px;
-      padding: 0 24px;
-    }
-
-    /* ── HOW IT WORKS ── */
-    .how {
-      position: relative;
-      z-index: 1;
-      max-width: 900px;
-      margin: 0 auto 80px;
-      padding: 0 24px;
-    }
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 32px;
-      counter-reset: step;
-    }
-
-    .step {
-      text-align: center;
-    }
-
-    .step-num {
-      width: 56px; height: 56px;
-      margin: 0 auto 16px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, rgba(127,255,107,0.15), rgba(56,255,232,0.08));
-      border: 1px solid rgba(127,255,107,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    .step-title { font-family: var(--font-display); font-weight: 700; margin-bottom: 8px; }
-    .step-desc { color: var(--muted); font-size: 0.88rem; }
-
-    /* ── FAQ ── */
-    .faq {
-      position: relative;
-      z-index: 1;
-      max-width: 760px;
-      margin: 0 auto 80px;
-      padding: 0 24px;
-    }
-
-    .faq-item {
-      border-bottom: 1px solid var(--border);
-    }
-
-    .faq-q {
-      width: 100%;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 1rem;
-      font-weight: 500;
-      text-align: left;
-      padding: 20px 0;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .faq-q .arrow {
-      color: var(--accent);
-      font-size: 0.9rem;
-      transition: transform 0.3s;
-      flex-shrink: 0;
-    }
-
-    .faq-a {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.35s ease;
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.7;
-    }
-
-    .faq-a.open { max-height: 300px; padding-bottom: 20px; }
-
-    .faq-item.open .arrow { transform: rotate(180deg); }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 48px 24px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    footer .footer-logo {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-
-    footer .footer-logo span { color: var(--accent); }
-
-    footer p { margin-bottom: 8px; }
-
-    footer .links { display: flex; gap: 20px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
-    footer .links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; }
-    footer .links a:hover { color: var(--text); }
-
-    /* ── NOTIFICATIONS ── */
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 20px;
-      font-size: 0.9rem;
-      display: none;
-      z-index: 999;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      max-width: 320px;
-    }
-
-    .toast.show { display: flex; align-items: center; gap: 10px; animation: fadeInUp 0.3s ease; }
-    .toast.success { border-color: rgba(127,255,107,0.3); }
-    .toast.error { border-color: rgba(255,107,107,0.3); }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── SPIN ANIMATION ── */
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .spinner {
-      width: 18px; height: 18px;
-      border: 2px solid rgba(0,0,0,0.2);
-      border-top-color: #000;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VidShrynk – Compress Videos Instantly, Free</title>
+<meta name="description" content="VidShrynk: Browser-based video compressor powered by FFmpeg.wasm. Compress, trim, mute. No uploads, 100% private."/>
+<meta property="og:title" content="VidShrynk – Compress Videos Instantly"/>
+<meta property="og:type" content="website"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<!-- AdSense — replace with your publisher ID -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<style>
+:root{--bg:#08090d;--surface:#111218;--surface2:#181920;--border:rgba(255,255,255,.07);--accent:#7fff6b;--accent2:#38ffe8;--accent3:#ff6b6b;--text:#f0f0ef;--muted:#7a7a8a;--r:16px;--rs:10px;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:16px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 10%,rgba(127,255,107,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(56,255,232,.05) 0%,transparent 60%);pointer-events:none;z-index:0}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(8,9,13,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:var(--fd);font-size:1.5rem;font-weight:800;letter-spacing:-.02em;color:var(--text);text-decoration:none}
+.logo span{color:var(--accent);text-shadow:0 0 20px rgba(127,255,107,.5)}
+.nav-badge{background:rgba(127,255,107,.1);border:1px solid rgba(127,255,107,.25);color:var(--accent);font-size:.7rem;font-weight:600;letter-spacing:.08em;padding:4px 12px;border-radius:50px;text-transform:uppercase}
+.hero{position:relative;z-index:1;text-align:center;padding:80px 24px 50px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);background:rgba(56,255,232,.06);border:1px solid rgba(56,255,232,.15);padding:5px 14px;border-radius:50px;margin-bottom:24px}
+.eyebrow::before{content:'';width:6px;height:6px;background:var(--accent2);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+h1{font-family:var(--fd);font-size:clamp(2.6rem,6vw,5rem);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:20px}
+h1 .grad{display:block;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{max-width:500px;margin:0 auto 36px;color:var(--muted);font-size:1.05rem;font-weight:300}
+.stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-bottom:48px}
+.stat-v{font-family:var(--fd);font-size:1.9rem;font-weight:800;color:var(--accent)}
+.stat-l{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+/* AD */
+.ad-wrap{position:relative;z-index:1;max-width:728px;margin:0 auto 44px;text-align:center;padding:0 16px}
+.ad-lbl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.ad-slot{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);min-height:90px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+/* TABS */
+.tabs-wrap{position:relative;z-index:1;max-width:860px;margin:0 auto 16px;padding:0 24px}
+.tab-bar{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:6px}
+.tab-btn{flex:1;padding:10px 8px;border:none;border-radius:10px;font-family:var(--fd);font-size:.85rem;font-weight:700;cursor:pointer;background:transparent;color:var(--muted);transition:all .22s}
+.tab-btn.active{background:linear-gradient(135deg,rgba(127,255,107,.18),rgba(56,255,232,.1));color:var(--text);box-shadow:0 2px 12px rgba(127,255,107,.15)}
+/* CARD */
+.card{position:relative;z-index:1;max-width:860px;margin:0 auto 52px;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:40px;box-shadow:0 20px 70px rgba(0,0,0,.5),0 0 40px rgba(127,255,107,.1)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+/* DROP ZONE */
+#dropZone{border:2px dashed rgba(127,255,107,.22);border-radius:var(--r);padding:52px 32px;text-align:center;cursor:pointer;transition:all .3s;background:rgba(127,255,107,.02)}
+#dropZone:hover,#dropZone.over{border-color:rgba(127,255,107,.6);background:rgba(127,255,107,.04);transform:scale(1.004)}
+.dz-icon{width:68px;height:68px;margin:0 auto 18px;background:linear-gradient(135deg,rgba(127,255,107,.15),rgba(56,255,232,.1));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.9rem;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.dz-title{font-family:var(--fd);font-size:1.2rem;font-weight:700;margin-bottom:6px}
+.dz-sub{color:var(--muted);font-size:.88rem}
+.dz-sub strong{color:var(--accent);cursor:pointer}
+.fmt-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.pill{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:50px;padding:2px 10px;font-size:.7rem;color:var(--muted)}
+/* FILE INFO */
+.file-info{display:none;background:rgba(127,255,107,.05);border:1px solid rgba(127,255,107,.14);border-radius:var(--rs);padding:14px 18px;margin-bottom:20px;align-items:center;gap:12px}
+.file-info.show{display:flex}
+.fi-icon{font-size:1.7rem}
+.fi-meta{flex:1;min-width:0}
+.fi-name{font-weight:600;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fi-size{font-size:.75rem;color:var(--muted);margin-top:2px}
+.rm-btn{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.2);color:var(--accent3);border-radius:7px;padding:5px 12px;font-size:.75rem;cursor:pointer;white-space:nowrap;transition:background .2s}
+.rm-btn:hover{background:rgba(255,107,107,.22)}
+/* PREVIEW */
+.preview-wrap{display:none;margin-bottom:20px;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);background:#000;text-align:center}
+.preview-wrap.show{display:block}
+.preview-wrap video{max-width:100%;max-height:240px;display:block;margin:0 auto}
+/* SETTINGS */
+.settings{display:none}
+.settings.show{display:block}
+.divider{height:1px;background:var(--border);margin:28px 0}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:600px){.sg{grid-template-columns:1fr}nav{padding:12px 16px}.card{padding:24px 16px;margin:0 12px 40px}.tab-btn{font-size:.72rem}h1{font-size:2.2rem}.stats{gap:20px}}
+.fl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.fl span{color:var(--accent);font-family:var(--fd);font-size:.88rem}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;background:rgba(255,255,255,.08);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(127,255,107,.5);cursor:pointer;transition:transform .2s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
+select,input[type=text]{width:100%;padding:10px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:var(--fb);font-size:.9rem;cursor:pointer;outline:none;transition:border-color .2s}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237a7a8a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+select:focus,input[type=text]:focus{border-color:rgba(127,255,107,.4)}
+/* TRIM */
+.trim-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px}
+.trim-note{font-size:.75rem;color:var(--muted);margin-top:6px}
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
+.tg-label{font-size:.92rem}
+.tg-sub{font-size:.75rem;color:var(--muted);margin-top:1px}
+.toggle{position:relative;width:42px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:24px;cursor:pointer;transition:.3s}
+.toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+.toggle input:checked+.toggle-slider{background:var(--accent)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(18px);background:#000}
+/* ESTIMATE */
+.estimate{margin-top:14px;font-size:.78rem;color:var(--muted);min-height:18px}
+/* FFMPEG STATUS */
+.ffmpeg-status{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--muted);margin-bottom:16px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--rs)}
+.ffmpeg-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s}
+.ffmpeg-dot.loading{background:#ffb830;animation:pulse 1s infinite}
+.ffmpeg-dot.ready{background:var(--accent)}
+.ffmpeg-dot.error{background:var(--accent3)}
+/* PROGRESS */
+.prog-wrap{display:none;margin-top:24px}
+.prog-wrap.show{display:block}
+.prog-top{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.prog-track{height:6px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden}
+.prog-bar{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .4s ease;box-shadow:0 0 12px rgba(127,255,107,.35)}
+.prog-note{margin-top:10px;font-size:.78rem;color:var(--accent2);font-style:italic;min-height:18px}
+/* OUTPUT */
+.out-wrap{display:none;margin-top:24px}
+.out-wrap.show{display:block}
+.out-box{background:rgba(127,255,107,.04);border:1px solid rgba(127,255,107,.18);border-radius:var(--r);padding:26px;text-align:center}
+.out-title{font-family:var(--fd);font-size:1.05rem;font-weight:700;color:var(--accent);margin-bottom:14px}
+.sz-compare{display:flex;align-items:center;justify-content:center;gap:20px;margin:14px 0;flex-wrap:wrap}
+.sz-v{font-family:var(--fd);font-size:1.5rem;font-weight:800}
+.sz-v.orig{color:var(--muted)}.sz-v.new{color:var(--accent)}
+.sz-l{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.savings{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;font-family:var(--fd);font-weight:800;font-size:1.05rem;padding:5px 18px;border-radius:50px;margin:6px 0 16px}
+/* BATCH */
+.batch-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;max-height:320px;overflow-y:auto}
+.batch-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--rs);padding:12px 16px}
+.bi-icon{font-size:1.4rem}
+.bi-meta{flex:1;min-width:0}
+.bi-name{font-size:.85rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bi-size{font-size:.72rem;color:var(--muted)}
+.bi-status{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:50px;white-space:nowrap}
+.bi-status.waiting{background:rgba(255,255,255,.06);color:var(--muted)}
+.bi-status.processing{background:rgba(56,255,232,.1);color:var(--accent2)}
+.bi-status.done{background:rgba(127,255,107,.1);color:var(--accent)}
+.bi-status.error{background:rgba(255,107,107,.1);color:var(--accent3)}
+.bi-dl{background:rgba(127,255,107,.1);border:1px solid rgba(127,255,107,.2);color:var(--accent);border-radius:7px;padding:4px 10px;font-size:.72rem;cursor:pointer;display:none;transition:background .2s}
+.bi-dl:hover{background:rgba(127,255,107,.2)}
+.bi-rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:2px 6px;transition:color .2s}
+.bi-rm:hover{color:var(--accent3)}
+.batch-add{border:2px dashed rgba(127,255,107,.18);border-radius:var(--rs);padding:24px;text-align:center;cursor:pointer;transition:all .3s;color:var(--muted);font-size:.9rem}
+.batch-add:hover{border-color:rgba(127,255,107,.5);color:var(--text)}
+.batch-progress{margin-top:8px;font-size:.8rem;color:var(--muted);text-align:center;min-height:18px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:13px 28px;border-radius:var(--rs);font-family:var(--fd);font-size:.95rem;font-weight:700;cursor:pointer;border:none;transition:all .25s;text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#5fe04e);color:#000;box-shadow:0 4px 26px rgba(127,255,107,.28);width:100%;justify-content:center;padding:15px}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(127,255,107,.4)}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-dl{background:linear-gradient(135deg,var(--accent2),#2dd9c5);color:#000;box-shadow:0 4px 20px rgba(56,255,232,.22)}
+.btn-dl:hover{transform:translateY(-2px)}
+.btn-out{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-out:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.04)}
+.btn-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+/* FEATURES / HOW / FAQ / FOOTER */
+.section{position:relative;z-index:1;max-width:1060px;margin:0 auto 72px;padding:0 24px}
+.sec-hd{text-align:center;margin-bottom:44px}
+.sec-tag{font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:10px}
+.sec-title{font-family:var(--fd);font-size:clamp(1.7rem,4vw,2.6rem);font-weight:800;letter-spacing:-.02em}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px;transition:all .3s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(127,255,107,.3),transparent);transform:scaleX(0);transition:transform .4s}
+.feat-card:hover::before{transform:scaleX(1)}
+.feat-card:hover{border-color:rgba(127,255,107,.14);transform:translateY(-2px)}
+.feat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:14px}
+.fi-g{background:rgba(127,255,107,.12)}.fi-c{background:rgba(56,255,232,.1)}.fi-p{background:rgba(180,100,255,.1)}.fi-o{background:rgba(255,180,60,.1)}.fi-b{background:rgba(80,140,255,.1)}.fi-r{background:rgba(255,107,107,.1)}
+.feat-title{font-family:var(--fd);font-size:.98rem;font-weight:700;margin-bottom:6px}
+.feat-desc{color:var(--muted);font-size:.84rem;line-height:1.6}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:28px}
+.step{text-align:center}
+.step-n{width:50px;height:50px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(135deg,rgba(127,255,107,.14),rgba(56,255,232,.07));border:1px solid rgba(127,255,107,.2);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:1.1rem;font-weight:800;color:var(--accent)}
+.step-t{font-family:var(--fd);font-weight:700;margin-bottom:6px;font-size:.92rem}
+.step-d{color:var(--muted);font-size:.82rem}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{width:100%;background:none;border:none;color:var(--text);font-family:var(--fb);font-size:.95rem;font-weight:500;text-align:left;padding:18px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.faq-q .arrow{color:var(--accent);font-size:.8rem;transition:transform .3s;flex-shrink:0}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;color:var(--muted);font-size:.88rem;line-height:1.7}
+.faq-a.open{max-height:200px;padding-bottom:16px}
+.faq-item.open .arrow{transform:rotate(180deg)}
+footer{position:relative;z-index:1;text-align:center;padding:40px 24px;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+.foot-logo{font-family:var(--fd);font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:10px}
+.foot-logo span{color:var(--accent)}
+.foot-links{display:flex;gap:18px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.foot-links a{color:var(--muted);text-decoration:none;font-size:.78rem}
+.foot-links a:hover{color:var(--text)}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:.85rem;display:none;z-index:999;box-shadow:0 8px 28px rgba(0,0,0,.5);max-width:300px}
+.toast.show{display:flex;align-items:center;gap:8px;animation:fadeUp .3s ease}
+.toast.success{border-color:rgba(127,255,107,.3)}.toast.error{border-color:rgba(255,107,107,.3)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:15px;height:15px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite}
+</style>
 </head>
 <body>
 
-<!-- ── NAV ── -->
 <nav>
   <a class="logo" href="#">Vid<span>Shrynk</span></a>
-  <div class="nav-badge">100% Free · No Upload</div>
+  <div class="nav-badge">FFmpeg Powered · Free · Private</div>
 </nav>
 
-<!-- ── HERO ── -->
 <section class="hero">
-  <div class="hero-eyebrow">Browser-Based · Zero Server · Instant</div>
-  <h1>Compress Video.<br><span class="line2">No Compromise.</span></h1>
-  <p class="hero-sub">Shrink your video files up to 90% — all processed locally in your browser. Your files never leave your device.</p>
-
-  <div class="stats-row">
-    <div class="stat"><div class="stat-val">90%</div><div class="stat-label">Max Size Reduction</div></div>
-    <div class="stat"><div class="stat-val">0 MB</div><div class="stat-label">Server Upload</div></div>
-    <div class="stat"><div class="stat-val">Free</div><div class="stat-label">Forever</div></div>
-    <div class="stat"><div class="stat-val">4K</div><div class="stat-label">Max Resolution</div></div>
+  <div class="eyebrow">FFmpeg.wasm · Zero Upload · Instant</div>
+  <h1>Compress Video.<br><span class="grad">No Compromise.</span></h1>
+  <p class="hero-sub">Powered by FFmpeg.wasm — real codec compression in your browser. Perfect duration, full audio, up to 90% smaller.</p>
+  <div class="stats">
+    <div><div class="stat-v">90%</div><div class="stat-l">Max Reduction</div></div>
+    <div><div class="stat-v">0 MB</div><div class="stat-l">Server Upload</div></div>
+    <div><div class="stat-v">FFmpeg</div><div class="stat-l">Real Codec</div></div>
+    <div><div class="stat-v">Free</div><div class="stat-l">Forever</div></div>
   </div>
 </section>
 
-<!-- ── AD BANNER TOP ── -->
-<div class="ad-banner">
-  <div class="ad-label">Advertisement</div>
+<!-- AD TOP -->
+<div class="ad-wrap">
+  <div class="ad-lbl">Advertisement</div>
   <div class="ad-slot">
-    <!-- AdSense Leaderboard 728×90 -->
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:728px;height:90px"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
-         data-ad-slot="1234567890"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="1234567890"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({})</script>
   </div>
 </div>
 
-<!-- ── COMPRESSOR CARD ── -->
-<div class="card" id="mainCard">
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('compress',this)">⚡ Compress</button>
+    <button class="tab-btn" onclick="switchTab('trim',this)">✂️ Trim</button>
+    <button class="tab-btn" onclick="switchTab('batch',this)">📦 Batch</button>
+  </div>
+</div>
 
-  <!-- File Info -->
-  <div id="fileInfo">
-    <div class="file-icon">🎬</div>
-    <div class="file-meta">
-      <div class="file-name" id="fileName">—</div>
-      <div class="file-size" id="fileSizeLabel">—</div>
+<!-- MAIN CARD -->
+<div class="card">
+
+  <!-- FFmpeg Status -->
+  <div class="ffmpeg-status">
+    <div class="ffmpeg-dot loading" id="ffDot"></div>
+    <span id="ffStatus">Loading FFmpeg.wasm engine…</span>
+  </div>
+
+  <!-- ═══════════ COMPRESS TAB ═══════════ -->
+  <div class="tab-panel active" id="tab-compress">
+    <div class="file-info" id="fileInfo">
+      <div class="fi-icon">🎬</div>
+      <div class="fi-meta">
+        <div class="fi-name" id="fileName"></div>
+        <div class="fi-size" id="fileSize"></div>
+      </div>
+      <button class="rm-btn" onclick="resetSingle()">✕ Remove</button>
     </div>
-    <button class="remove-btn" onclick="resetAll()">✕ Remove</button>
-  </div>
-
-  <!-- Video Preview -->
-  <div id="previewWrap">
-    <video id="videoPreview" controls preload="metadata"></video>
-  </div>
-
-  <!-- Drop Zone -->
-  <div id="dropZone" onclick="document.getElementById('fileInput').click()">
-    <div class="drop-icon">📹</div>
-    <div class="drop-title">Drop your video here</div>
-    <div class="drop-sub">or <strong onclick="event.stopPropagation(); document.getElementById('fileInput').click()">browse files</strong></div>
-    <div class="format-pills">
-      <span class="pill">MP4</span><span class="pill">MOV</span><span class="pill">AVI</span>
-      <span class="pill">MKV</span><span class="pill">WebM</span><span class="pill">WMV</span>
+    <div class="preview-wrap" id="previewWrap">
+      <video id="videoPreview" controls preload="metadata"></video>
     </div>
-    <input type="file" id="fileInput" accept="video/*"/>
-  </div>
-
-  <!-- Settings Panel -->
-  <div id="settingsPanel">
-    <div class="divider"></div>
-
-    <div class="settings-grid">
-      <!-- Quality -->
-      <div>
-        <div class="field-label">Video Quality <span id="qualityVal">75%</span></div>
-        <input type="range" id="qualitySlider" min="5" max="100" value="75" oninput="updateQuality()"/>
+    <div id="dropZone" onclick="document.getElementById('fileInput').click()">
+      <div class="dz-icon">📹</div>
+      <div class="dz-title">Drop your video here</div>
+      <div class="dz-sub">or <strong onclick="event.stopPropagation();document.getElementById('fileInput').click()">browse files</strong></div>
+      <div class="fmt-pills">
+        <span class="pill">MP4</span><span class="pill">MOV</span><span class="pill">AVI</span><span class="pill">MKV</span><span class="pill">WebM</span><span class="pill">WMV</span><span class="pill">FLV</span>
       </div>
-
-      <!-- Scale -->
-      <div>
-        <div class="field-label">Resolution Scale <span id="scaleVal">100%</span></div>
-        <input type="range" id="scaleSlider" min="25" max="100" value="100" step="25" oninput="updateScale()"/>
-      </div>
-
-      <!-- Output Format -->
-      <div>
-        <div class="field-label">Output Format</div>
-        <select id="formatSel">
-          <option value="mp4">MP4 (H.264) – Best Compatibility</option>
-          <option value="webm">WebM (VP8) – Web Optimized</option>
-        </select>
-      </div>
-
-      <!-- Frame Rate -->
-      <div>
-        <div class="field-label">Frame Rate</div>
-        <select id="fpsSel">
-          <option value="original">Keep Original</option>
-          <option value="60">60 FPS</option>
-          <option value="30">30 FPS</option>
-          <option value="24">24 FPS – Cinematic</option>
-          <option value="15">15 FPS – Maximum Compress</option>
-        </select>
-      </div>
+      <input type="file" id="fileInput" accept="video/*" style="display:none"/>
     </div>
 
-    <!-- Estimated size note -->
-    <p id="estimateNote" style="margin-top:18px; font-size:0.82rem; color:var(--muted);"></p>
-
-    <div class="divider"></div>
-
-    <button class="btn btn-primary" id="compressBtn" onclick="startCompression()">
-      <span id="btnLabel">⚡ Compress Video</span>
-    </button>
-  </div>
-
-  <!-- Progress -->
-  <div id="progressWrap">
-    <div class="progress-label">
-      <span id="progressStep">Processing…</span>
-      <span id="progressPct">0%</span>
-    </div>
-    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
-    <div class="progress-step" id="progressNote"></div>
-  </div>
-
-  <!-- Output -->
-  <div id="outputWrap">
-    <div class="output-box">
-      <div class="output-title">🎉 Compression Complete!</div>
-      <div class="size-compare">
-        <div class="size-box">
-          <div class="size-val original" id="origSizeOut">—</div>
-          <div class="size-lbl">Original</div>
+    <div class="settings" id="settings">
+      <div class="divider"></div>
+      <div class="sg">
+        <div>
+          <div class="fl">Video Quality (CRF) <span id="qualVal">23</span></div>
+          <input type="range" id="qualSlider" min="10" max="51" value="23" oninput="updateQual()"/>
+          <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-top:4px"><span>Best Quality</span><span>Smallest Size</span></div>
         </div>
-        <div class="arrow-icon">→</div>
-        <div class="size-box">
-          <div class="size-val compressed" id="newSizeOut">—</div>
-          <div class="size-lbl">Compressed</div>
+        <div>
+          <div class="fl">Resolution Scale <span id="scaleVal">100%</span></div>
+          <input type="range" id="scaleSlider" min="25" max="100" value="100" step="25" oninput="updateScale()"/>
+        </div>
+        <div>
+          <div class="fl" style="margin-bottom:8px">Output Format</div>
+          <select id="fmtSel" onchange="updateEstimate()">
+            <option value="mp4">MP4 (H.264) – Best Compatibility</option>
+            <option value="webm">WebM (VP8) – Web Optimized</option>
+            <option value="mov">MOV – Apple / Final Cut</option>
+          </select>
+        </div>
+        <div>
+          <div class="fl" style="margin-bottom:8px">Frame Rate</div>
+          <select id="fpsSel" onchange="updateEstimate()">
+            <option value="">Keep Original</option>
+            <option value="60">60 FPS</option>
+            <option value="30">30 FPS</option>
+            <option value="24">24 FPS – Cinematic</option>
+            <option value="15">15 FPS – Max Compress</option>
+          </select>
         </div>
       </div>
-      <div class="savings-badge" id="savingsBadge">Saved 0%</div>
-      <div class="btn-row">
-        <button class="btn btn-download" id="downloadBtn" onclick="downloadOutput()">⬇ Download Video</button>
-        <button class="btn btn-outline" onclick="resetAll()">Compress Another</button>
+
+      <!-- Mute toggle -->
+      <div class="divider" style="margin:20px 0"></div>
+      <div class="toggle-row">
+        <div>
+          <div class="tg-label">🔇 Mute Audio</div>
+          <div class="tg-sub">Remove audio track from output</div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="muteChk" onchange="updateEstimate()"/><span class="toggle-slider"></span></label>
+      </div>
+
+      <div class="estimate" id="estimate"></div>
+      <div class="divider"></div>
+      <button class="btn btn-primary" id="compressBtn" onclick="runCompress()" disabled>
+        <span id="compressBtnLbl">⚡ Compress Video</span>
+      </button>
+    </div>
+
+    <div class="prog-wrap" id="progWrap">
+      <div class="prog-top"><span id="progLabel">Processing…</span><span id="progPct">0%</span></div>
+      <div class="prog-track"><div class="prog-bar" id="progBar"></div></div>
+      <div class="prog-note" id="progNote"></div>
+    </div>
+
+    <div class="out-wrap" id="outWrap">
+      <div class="out-box">
+        <div class="out-title">🎉 Compression Complete!</div>
+        <div class="sz-compare">
+          <div><div class="sz-v orig" id="origSz">—</div><div class="sz-l">Original</div></div>
+          <div style="color:var(--accent2);font-size:1.3rem">→</div>
+          <div><div class="sz-v new" id="newSz">—</div><div class="sz-l">Compressed</div></div>
+        </div>
+        <div class="savings" id="savingsBadge">Saved 0%</div>
+        <div class="btn-row">
+          <button class="btn btn-dl" id="dlBtn" onclick="downloadOut()">⬇ Download Video</button>
+          <button class="btn btn-out" onclick="resetSingle()">Compress Another</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- ═══════════ TRIM TAB ═══════════ -->
+  <div class="tab-panel" id="tab-trim">
+    <div class="file-info" id="trimFileInfo">
+      <div class="fi-icon">🎬</div>
+      <div class="fi-meta">
+        <div class="fi-name" id="trimFileName"></div>
+        <div class="fi-size" id="trimFileSize"></div>
+      </div>
+      <button class="rm-btn" onclick="resetTrim()">✕ Remove</button>
+    </div>
+    <div class="preview-wrap" id="trimPreview">
+      <video id="trimVideoPreview" controls preload="metadata"></video>
+    </div>
+    <div id="trimDropZone" onclick="document.getElementById('trimInput').click()" style="border:2px dashed rgba(127,255,107,.22);border-radius:16px;padding:52px 32px;text-align:center;cursor:pointer;transition:all .3s;background:rgba(127,255,107,.02)">
+      <div class="dz-icon">✂️</div>
+      <div class="dz-title">Drop video to trim</div>
+      <div class="dz-sub">or <strong onclick="event.stopPropagation();document.getElementById('trimInput').click()">browse files</strong></div>
+      <input type="file" id="trimInput" accept="video/*" style="display:none"/>
+    </div>
+
+    <div class="settings" id="trimSettings">
+      <div class="divider"></div>
+      <div class="sg">
+        <div>
+          <div class="fl" style="margin-bottom:8px">Start Time (hh:mm:ss or seconds)</div>
+          <input type="text" id="trimStart" placeholder="0 or 00:00:00" value="0"/>
+          <div class="trim-note">Video will start from this point</div>
+        </div>
+        <div>
+          <div class="fl" style="margin-bottom:8px">End Time (hh:mm:ss or seconds)</div>
+          <input type="text" id="trimEnd" placeholder="End of video"/>
+          <div class="trim-note" id="trimDurNote">Leave blank to keep until end</div>
+        </div>
+      </div>
+      <div class="divider" style="margin:20px 0"></div>
+      <div class="toggle-row">
+        <div>
+          <div class="tg-label">🔇 Mute Audio in Trim</div>
+          <div class="tg-sub">Remove audio from trimmed output</div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="trimMuteChk"/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="tg-label">⚡ Also Compress Output</div>
+          <div class="tg-sub">Apply CRF 28 compression after trim</div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="trimCompressChk" checked/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="divider"></div>
+      <button class="btn btn-primary" id="trimBtn" onclick="runTrim()" disabled>
+        <span id="trimBtnLbl">✂️ Trim Video</span>
+      </button>
+    </div>
+
+    <div class="prog-wrap" id="trimProgWrap">
+      <div class="prog-top"><span id="trimProgLabel">Processing…</span><span id="trimProgPct">0%</span></div>
+      <div class="prog-track"><div class="prog-bar" id="trimProgBar"></div></div>
+      <div class="prog-note" id="trimProgNote"></div>
+    </div>
+
+    <div class="out-wrap" id="trimOutWrap">
+      <div class="out-box">
+        <div class="out-title">✂️ Trim Complete!</div>
+        <div class="sz-compare">
+          <div><div class="sz-v orig" id="trimOrigSz">—</div><div class="sz-l">Original</div></div>
+          <div style="color:var(--accent2);font-size:1.3rem">→</div>
+          <div><div class="sz-v new" id="trimNewSz">—</div><div class="sz-l">Trimmed</div></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-dl" id="trimDlBtn" onclick="downloadTrimOut()">⬇ Download Trimmed</button>
+          <button class="btn btn-out" onclick="resetTrim()">Trim Another</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ BATCH TAB ═══════════ -->
+  <div class="tab-panel" id="tab-batch">
+    <div id="batchList" class="batch-list" style="display:none"></div>
+    <div class="batch-add" id="batchDrop" onclick="document.getElementById('batchInput').click()">
+      <div style="font-size:1.6rem;margin-bottom:8px">📦</div>
+      <div style="font-family:var(--fd);font-weight:700;margin-bottom:4px">Add Videos to Batch</div>
+      <div>Click or drop multiple files — all will be compressed with same settings</div>
+      <input type="file" id="batchInput" accept="video/*" multiple style="display:none"/>
+    </div>
+    <div class="batch-progress" id="batchProgress"></div>
+
+    <div id="batchSettings" style="display:none">
+      <div class="divider"></div>
+      <div class="sg">
+        <div>
+          <div class="fl">Quality (CRF) <span id="bQualVal">28</span></div>
+          <input type="range" id="bQualSlider" min="10" max="51" value="28" oninput="document.getElementById('bQualVal').textContent=this.value"/>
+        </div>
+        <div>
+          <div class="fl">Resolution Scale <span id="bScaleVal">100%</span></div>
+          <input type="range" id="bScaleSlider" min="25" max="100" value="100" step="25" oninput="document.getElementById('bScaleVal').textContent=this.value+'%'"/>
+        </div>
+        <div>
+          <div class="fl" style="margin-bottom:8px">Output Format</div>
+          <select id="bFmtSel">
+            <option value="mp4">MP4 (H.264)</option>
+            <option value="webm">WebM (VP8)</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding-top:8px">
+          <label class="toggle"><input type="checkbox" id="bMuteChk"/><span class="toggle-slider"></span></label>
+          <div><div class="tg-label">Mute All</div><div class="tg-sub">Remove audio from all</div></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <button class="btn btn-primary" id="batchBtn" onclick="runBatch()" disabled>
+        <span id="batchBtnLbl">📦 Compress All Videos</span>
+      </button>
+    </div>
+  </div>
+
 </div>
 
-<!-- ── AD (Mid-page rectangle) ── -->
-<div class="ad-section">
-  <div class="ad-label">Advertisement</div>
-  <div class="ad-slot" style="min-height:250px;">
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:336px;height:280px"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
-         data-ad-slot="0987654321"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+<!-- AD MID -->
+<div class="ad-wrap">
+  <div class="ad-lbl">Advertisement</div>
+  <div class="ad-slot" style="min-height:250px">
+    <ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="0987654321"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({})</script>
   </div>
 </div>
 
-<!-- ── HOW IT WORKS ── -->
-<section class="how">
-  <div class="section-header">
-    <div class="section-tag">Simple Process</div>
-    <h2 class="section-title">How VidShrynk Works</h2>
-  </div>
+<!-- HOW -->
+<section class="section">
+  <div class="sec-hd"><div class="sec-tag">Simple Process</div><h2 class="sec-title">How VidShrynk Works</h2></div>
   <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-title">Upload Your Video</div>
-      <div class="step-desc">Drop or browse any video file from your device. MP4, MOV, AVI, MKV, WebM — all supported.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-title">Set Your Settings</div>
-      <div class="step-desc">Choose quality, resolution scale, frame rate, and output format to match your needs.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-title">Compress Instantly</div>
-      <div class="step-desc">Our browser-based engine processes everything locally using WebAssembly &amp; Canvas API.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-title">Download &amp; Done</div>
-      <div class="step-desc">Your compressed video is ready instantly. No waiting for cloud processing or uploads.</div>
-    </div>
+    <div class="step"><div class="step-n">1</div><div class="step-t">Upload Video</div><div class="step-d">Drop any video — MP4, MOV, AVI, MKV, WebM, WMV, FLV.</div></div>
+    <div class="step"><div class="step-n">2</div><div class="step-t">Set Options</div><div class="step-d">Adjust quality, resolution, FPS, format, trim points, or mute.</div></div>
+    <div class="step"><div class="step-n">3</div><div class="step-t">FFmpeg Encodes</div><div class="step-d">Real H.264/VP8 encoding via FFmpeg.wasm — no server, no upload.</div></div>
+    <div class="step"><div class="step-n">4</div><div class="step-t">Download</div><div class="step-d">Perfect duration, full audio, massively smaller file.</div></div>
   </div>
 </section>
 
-<!-- ── FEATURES ── -->
-<section class="features">
-  <div class="section-header">
-    <div class="section-tag">Why VidShrynk</div>
-    <h2 class="section-title">Everything You Need</h2>
-  </div>
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon green">🔒</div>
-      <div class="feature-title">100% Private</div>
-      <div class="feature-desc">Your video never leaves your device. All processing happens locally — zero server uploads, zero privacy concerns.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon cyan">⚡</div>
-      <div class="feature-title">Browser-Powered</div>
-      <div class="feature-desc">Uses WebAssembly and the Canvas API directly in your browser for blazing-fast compression with no installs.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon green">🎯</div>
-      <div class="feature-title">Quality Control</div>
-      <div class="feature-desc">Slide between 5% and 100% quality to perfectly balance file size and visual clarity for any use case.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon purple">📐</div>
-      <div class="feature-title">Resolution Scaling</div>
-      <div class="feature-desc">Scale video resolution to 25%, 50%, or 75% to dramatically cut file sizes while keeping the video watchable.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon orange">🎬</div>
-      <div class="feature-title">Frame Rate Control</div>
-      <div class="feature-desc">Reduce frame rate from original down to 15 FPS for maximum compression on footage that doesn't need smooth motion.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon blue">🌐</div>
-      <div class="feature-title">Multi-Format Output</div>
-      <div class="feature-desc">Export as MP4 (H.264) for compatibility or WebM for web optimization. More formats coming soon.</div>
-    </div>
+<!-- FEATURES -->
+<section class="section">
+  <div class="sec-hd"><div class="sec-tag">Why VidShrynk</div><h2 class="sec-title">Everything You Need</h2></div>
+  <div class="feat-grid">
+    <div class="feat-card"><div class="feat-icon fi-g">🔒</div><div class="feat-title">100% Private</div><div class="feat-desc">Files never leave your device. FFmpeg runs in WebAssembly locally — zero server, zero cloud.</div></div>
+    <div class="feat-card"><div class="feat-icon fi-c">⚡</div><div class="feat-title">Real FFmpeg Engine</div><div class="feat-desc">Powered by FFmpeg.wasm — the same codec used by professionals. True H.264 and VP8 encoding.</div></div>
+    <div class="feat-card"><div class="feat-icon fi-g">🎯</div><div class="feat-title">Perfect Output</div><div class="feat-desc">Exact same duration as input. Full audio preserved. Zero frame drops. CRF quality control.</div></div>
+    <div class="feat-card"><div class="feat-icon fi-p">✂️</div><div class="feat-title">Trim Tool</div><div class="feat-desc">Cut any segment from your video. Set start and end times down to the second.</div></div>
+    <div class="feat-card"><div class="feat-icon fi-o">📦</div><div class="feat-title">Batch Compress</div><div class="feat-desc">Queue multiple videos and compress them all in one go with shared settings.</div></div>
+    <div class="feat-card"><div class="feat-icon fi-b">🔇</div><div class="feat-title">Mute Audio</div><div class="feat-desc">Strip audio track entirely for silent clips — great for social media or screen recordings.</div></div>
   </div>
 </section>
 
-<!-- ── AD Bottom Banner ── -->
-<div class="ad-banner" style="margin-bottom: 60px;">
-  <div class="ad-label">Advertisement</div>
+<!-- AD BOTTOM -->
+<div class="ad-wrap" style="margin-bottom:56px">
+  <div class="ad-lbl">Advertisement</div>
   <div class="ad-slot">
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:728px;height:90px"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
-         data-ad-slot="1122334455"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="1122334455"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({})</script>
   </div>
 </div>
 
-<!-- ── FAQ ── -->
-<section class="faq">
-  <div class="section-header">
-    <div class="section-tag">FAQ</div>
-    <h2 class="section-title">Common Questions</h2>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-q" onclick="toggleFaq(this)">
-      Is VidShrynk really free? <span class="arrow">▼</span>
-    </button>
-    <div class="faq-a">Yes, completely free forever. We sustain the project through non-intrusive ads. No subscription, no account, no credit card required — ever.</div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-q" onclick="toggleFaq(this)">
-      Is my video private? Does it get uploaded? <span class="arrow">▼</span>
-    </button>
-    <div class="faq-a">Absolutely private. VidShrynk runs entirely in your browser using JavaScript and the Canvas API. Your video bytes never leave your computer. We don't have servers that touch your files.</div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-q" onclick="toggleFaq(this)">
-      What video formats are supported? <span class="arrow">▼</span>
-    </button>
-    <div class="faq-a">Input: MP4, MOV, AVI, MKV, WebM, WMV, and any format your browser's native video decoder supports. Output: MP4 (H.264 via MediaRecorder) or WebM. More output formats are on our roadmap.</div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-q" onclick="toggleFaq(this)">
-      What is the maximum file size? <span class="arrow">▼</span>
-    </button>
-    <div class="faq-a">There's no hard server limit since nothing is uploaded. The practical limit depends on your device's RAM. Most modern computers handle files up to several GB comfortably. Very large files (10GB+) may be slow depending on your hardware.</div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-q" onclick="toggleFaq(this)">
-      How does the browser compress video without FFmpeg? <span class="arrow">▼</span>
-    </button>
-    <div class="faq-a">VidShrynk uses the browser's native MediaRecorder API combined with Canvas rendering to re-encode video frames at reduced quality and resolution. This is fast, private, and requires no plugins or downloads. For deeper codec control, a future WebAssembly FFmpeg mode is planned.</div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-q" onclick="toggleFaq(this)">
-      Why is compression taking a long time? <span class="arrow">▼</span>
-    </button>
-    <div class="faq-a">Compression speed depends on video length, resolution, and your device's CPU. A 1-hour 4K video will take longer than a 2-minute 720p clip. Reducing resolution scale to 50% or lower dramatically speeds up processing.</div>
-  </div>
+<!-- FAQ -->
+<section class="section" style="max-width:740px">
+  <div class="sec-hd"><div class="sec-tag">FAQ</div><h2 class="sec-title">Common Questions</h2></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Will the output video be the exact same length? <span class="arrow">▼</span></button><div class="faq-a">Yes, 100%. VidShrynk uses FFmpeg.wasm which re-encodes the video codec without touching the container duration. The output will be frame-perfect in length unless you use the Trim tool intentionally.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Does audio get preserved? <span class="arrow">▼</span></button><div class="faq-a">Yes. FFmpeg copies or re-encodes the audio track correctly. Unless you enable the "Mute Audio" toggle, all audio is fully preserved in sync with the video.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What is CRF quality? <span class="arrow">▼</span></button><div class="faq-a">CRF (Constant Rate Factor) is the quality scale FFmpeg uses. Lower = better quality and larger file (10 is near lossless). Higher = smaller file with more compression (51 is lowest quality). 23 is a great default for most uses.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is my video private? <span class="arrow">▼</span></button><div class="faq-a">Absolutely. FFmpeg.wasm runs entirely inside your browser using WebAssembly. Nothing is uploaded anywhere. Your files never leave your computer.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Why does it take a minute to start the first time? <span class="arrow">▼</span></button><div class="faq-a">FFmpeg.wasm is a ~10MB WebAssembly binary that needs to download and compile once. After that first load, it stays cached and starts instantly on future visits.</div></div>
 </section>
 
-<!-- ── FOOTER ── -->
 <footer>
-  <div class="footer-logo">Vid<span>Shrynk</span></div>
+  <div class="foot-logo">Vid<span>Shrynk</span></div>
   <p>Compress smarter. Zero upload. Zero compromise.</p>
-  <p style="font-size:0.78rem; margin-top:4px;">© 2025 VidShrynk. All rights reserved. Built with ❤️ for the open web.</p>
-  <div class="links">
-    <a href="#">Privacy Policy</a>
-    <a href="#">Terms of Service</a>
-    <a href="#">Contact</a>
-    <a href="#">Blog</a>
-  </div>
+  <p style="margin-top:4px;font-size:.72rem">© 2025 VidShrynk. All rights reserved. Powered by FFmpeg.wasm.</p>
+  <div class="foot-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Contact</a><a href="#">Blog</a></div>
 </footer>
 
-<!-- ── TOAST ── -->
 <div class="toast" id="toast"></div>
 
-<!-- ── SCRIPT ── -->
 <script>
-  // ─────────────────────────────────────────────
-  // STATE
-  // ─────────────────────────────────────────────
-  let selectedFile = null;
-  let outputBlob = null;
-  let outputURL = null;
-  let mediaRecorder = null;
-  let chunks = [];
-  let isCompressing = false;
-  let activeRafId = null;
+// ══════════════════════════════════════════════
+// FFmpeg.wasm loader — uses CDN @0.12.x (stable)
+// ══════════════════════════════════════════════
+let ffmpegReady = false;
+let ffmpegLoading = false;
+let ffmpegInstance = null;
 
-  // ─────────────────────────────────────────────
-  // DROP ZONE
-  // ─────────────────────────────────────────────
-  const dropZone = document.getElementById('dropZone');
-
-  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-  dropZone.addEventListener('drop', e => {
-    e.preventDefault();
-    dropZone.classList.remove('drag-over');
-    const f = e.dataTransfer.files[0];
-    if (f && f.type.startsWith('video/')) handleFile(f);
-    else showToast('⚠️ Please drop a valid video file.', 'error');
-  });
-
-  document.getElementById('fileInput').addEventListener('change', e => {
-    if (e.target.files[0]) handleFile(e.target.files[0]);
-  });
-
-  function handleFile(file) {
-    selectedFile = file;
-
-    // Show file info
-    document.getElementById('fileName').textContent = file.name;
-    document.getElementById('fileSizeLabel').textContent = formatSize(file.size) + ' · ' + file.type;
-    document.getElementById('fileInfo').classList.add('active');
-
-    // Hide dropzone
-    dropZone.style.display = 'none';
-
-    // Preview
-    const url = URL.createObjectURL(file);
-    const vid = document.getElementById('videoPreview');
-    vid.src = url;
-    document.getElementById('previewWrap').classList.add('active');
-
-    // Show settings
-    document.getElementById('settingsPanel').classList.add('active');
-
-    // Hide output/progress
-    document.getElementById('outputWrap').classList.remove('active');
-    document.getElementById('progressWrap').classList.remove('active');
-
-    updateEstimate();
+async function loadFFmpeg() {
+  if (ffmpegReady) return true;
+  if (ffmpegLoading) {
+    // Wait for it
+    while (ffmpegLoading) await sleep(200);
+    return ffmpegReady;
   }
+  ffmpegLoading = true;
+  setFFStatus('loading', 'Loading FFmpeg.wasm engine…');
+  try {
+    // Dynamically load FFmpeg from CDN
+    await loadScript('https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js');
+    await loadScript('https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js');
 
-  // ─────────────────────────────────────────────
-  // SLIDERS
-  // ─────────────────────────────────────────────
-  function updateQuality() {
-    document.getElementById('qualityVal').textContent = document.getElementById('qualitySlider').value + '%';
-    updateEstimate();
-  }
+    const { FFmpeg } = window.FFmpegWASM || FFmpegLib;
+    const ffmpeg = new FFmpeg();
 
-  function updateScale() {
-    document.getElementById('scaleVal').textContent = document.getElementById('scaleSlider').value + '%';
-    updateEstimate();
-  }
-
-  function updateEstimate() {
-    if (!selectedFile) return;
-    const q = parseInt(document.getElementById('qualitySlider').value) / 100;
-    const s = parseInt(document.getElementById('scaleSlider').value) / 100;
-    const fps = document.getElementById('fpsSel').value;
-    let fpsMulti = 1;
-    if (fps !== 'original') {
-      // rough estimate based on common fps values (original assumed ~30)
-      fpsMulti = Math.min(1, parseInt(fps) / 30);
-    }
-    const est = selectedFile.size * q * s * s * fpsMulti;
-    const savings = Math.round((1 - est / selectedFile.size) * 100);
-    document.getElementById('estimateNote').textContent =
-      `Estimated output: ~${formatSize(est)} (${Math.max(0, savings)}% smaller)`;
-  }
-
-  document.getElementById('fpsSel').addEventListener('change', updateEstimate);
-  document.getElementById('formatSel').addEventListener('change', updateEstimate);
-
-  // ─────────────────────────────────────────────
-  // COMPRESS
-  // ─────────────────────────────────────────────
-  async function startCompression() {
-    if (!selectedFile || isCompressing) return;
-    isCompressing = true;
-
-    outputBlob = null;
-    outputURL = null;
-    chunks = [];
-
-    // UI state
-    const btn = document.getElementById('compressBtn');
-    document.getElementById('btnLabel').innerHTML = '<span class="spinner"></span> Compressing…';
-    btn.disabled = true;
-
-    document.getElementById('outputWrap').classList.remove('active');
-    document.getElementById('progressWrap').classList.add('active');
-    setProgress(0, 'Loading video…', 'Preparing frames…');
-
-    const quality = parseInt(document.getElementById('qualitySlider').value) / 100;
-    const scale   = parseInt(document.getElementById('scaleSlider').value)   / 100;
-    const fmtSel  = document.getElementById('formatSel').value;
-    const fpsSel  = document.getElementById('fpsSel').value;
-
-    // ── Create hidden video element for seeking ──
-    const video = document.createElement('video');
-    video.src = URL.createObjectURL(selectedFile);
-    video.muted = true;
-    video.playsInline = true;
-    video.preload = 'auto';
-    video.crossOrigin = 'anonymous';
-
-    // Wait for full metadata (width/height/duration must be known)
-    await new Promise((res, rej) => {
-      video.onloadeddata = res;   // loadeddata ensures first frame is decoded
-      video.onerror = () => rej(new Error('Video failed to load. Format may not be supported by your browser.'));
-      video.load();
-    });
-
-    const origW    = video.videoWidth;
-    const origH    = video.videoHeight;
-    const duration = video.duration;
-
-    // Guard: video dimensions must be non-zero
-    if (!origW || !origH || !duration || !isFinite(duration)) {
-      showToast('❌ Cannot read video dimensions. Try a different file.', 'error');
-      resetBtn(); isCompressing = false;
-      document.getElementById('progressWrap').classList.remove('active');
-      return;
-    }
-
-    const targetW = Math.max(2, Math.round(origW * scale));
-    const targetH = Math.max(2, Math.round(origH * scale));
-
-    setProgress(5, 'Setting up canvas…', `${origW}×${origH} → ${targetW}×${targetH}`);
-
-    // ── Canvas ──
-    const canvas = document.createElement('canvas');
-    canvas.width  = targetW;
-    canvas.height = targetH;
-    const ctx = canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = quality > 0.7 ? 'high' : quality > 0.4 ? 'medium' : 'low';
-
-    // ── FPS & bitrate ──
-    const targetFps     = fpsSel === 'original' ? 30 : parseInt(fpsSel);
-    const bitsPerPixel  = 0.05 * quality;
-    const estimatedBps  = Math.round(targetW * targetH * targetFps * bitsPerPixel);
-    const clampedBps    = Math.max(80000, Math.min(estimatedBps, 20_000_000));
-
-    // ── Canvas stream (video only; audio added separately if possible) ──
-    const stream = canvas.captureStream(targetFps);
-
-    // ── Audio: use a separate audio element to avoid MediaElementSource conflicts ──
-    let audioCtx = null;
-    try {
-      const audioVideo = document.createElement('video');
-      audioVideo.src    = URL.createObjectURL(selectedFile);
-      audioVideo.muted  = false;
-      audioVideo.volume = 1;
-      audioVideo.preload = 'auto';
-      audioCtx = new AudioContext();
-      const audioSrc  = audioCtx.createMediaElementSource(audioVideo);
-      const audioDest = audioCtx.createMediaStreamDestination();
-      audioSrc.connect(audioDest);
-      audioDest.stream.getAudioTracks().forEach(t => stream.addTrack(t));
-      // We'll sync seek on audioVideo alongside main video
-      video._audioEl = audioVideo;
-    } catch (_) {
-      // No audio or browser restriction — video-only output is fine
-    }
-
-    // ── MediaRecorder MIME negotiation ──
-    const mimeOptions = [
-      'video/webm;codecs=vp9,opus',
-      'video/webm;codecs=vp8,opus',
-      'video/webm;codecs=vp9',
-      'video/webm;codecs=vp8',
-      'video/webm',
-    ];
-    let recMimeType = mimeOptions.find(m => MediaRecorder.isTypeSupported(m)) || 'video/webm';
-
-    mediaRecorder = new MediaRecorder(stream, {
-      mimeType:             recMimeType,
-      videoBitsPerSecond:   clampedBps,
-    });
-
-    mediaRecorder.ondataavailable = e => { if (e.data && e.data.size > 0) chunks.push(e.data); };
-
-    mediaRecorder.onstop = () => {
-      // Close audio context if opened
-      if (audioCtx) try { audioCtx.close(); } catch(_) {}
-
-      const blob     = new Blob(chunks, { type: recMimeType });
-      const ext      = fmtSel === 'webm' ? 'webm' : 'mp4';
-      const baseName = selectedFile.name.replace(/\.[^.]+$/, '');
-
-      outputBlob = blob;
-      outputURL  = URL.createObjectURL(blob);
-
-      const origSize = selectedFile.size;
-      const newSize  = blob.size;
-      const savings  = Math.max(0, Math.round((1 - newSize / origSize) * 100));
-
-      document.getElementById('origSizeOut').textContent  = formatSize(origSize);
-      document.getElementById('newSizeOut').textContent   = formatSize(newSize);
-      document.getElementById('savingsBadge').textContent = `Saved ${savings}%`;
-      document.getElementById('downloadBtn').dataset.name = `${baseName}_vidshrynk.${ext}`;
-
-      document.getElementById('progressWrap').classList.remove('active');
-      document.getElementById('outputWrap').classList.add('active');
-
-      resetBtn();
-      isCompressing = false;
-      showToast('✅ Video compressed successfully!', 'success');
-    };
-
-    // ── PLAY-THROUGH CAPTURE (fast: runs at 2× real-time speed) ──
-    // Instead of seeking frame-by-frame (slow), we play the video forward
-    // and use requestAnimationFrame to draw each decoded frame to canvas.
-    // MediaRecorder captures the canvas stream continuously.
-    // Result: compression finishes in ~50% of video duration, not 10×.
-
-    video.muted = true;
-    video.playbackRate = 1.0; // Must stay 1× — MediaRecorder records in real-time.
-                               // Any other playback rate compresses/expands duration.
-    video.currentTime  = 0;
-
-    await new Promise(res => {
-      const onSeeked = () => { video.removeEventListener('seeked', onSeeked); res(); };
-      video.addEventListener('seeked', onSeeked);
-    });
-
-    setProgress(8, 'Starting capture…', 'Recording in real-time — output length will match original');
-
-    mediaRecorder.start(200);
-
-    let rafId = null;
-
-    const drawLoop = () => {
-      if (!isCompressing) {
-        cancelAnimationFrame(rafId);
-        activeRafId = null;
-        return;
+    ffmpeg.on('log', ({ message }) => {
+      // Parse progress from FFmpeg log
+      const timeMatch = message.match(/time=(\d+):(\d+):([\d.]+)/);
+      if (timeMatch) {
+        window._ffCurrentTime = parseInt(timeMatch[1])*3600 + parseInt(timeMatch[2])*60 + parseFloat(timeMatch[3]);
       }
-
-      // Draw current video frame to canvas
-      ctx.clearRect(0, 0, targetW, targetH);
-      ctx.drawImage(video, 0, 0, targetW, targetH);
-
-      const ct  = video.currentTime;
-      const pct = Math.min(97, 8 + Math.round((ct / duration) * 89));
-      setProgress(pct,
-        `Encoding… ${formatTime(ct)} / ${formatTime(duration)}`,
-        `${Math.round((ct / duration) * 100)}% through`
-      );
-
-      rafId = requestAnimationFrame(drawLoop);
-      activeRafId = rafId;
-    };
-
-    // Start rAF loop then play
-    rafId = requestAnimationFrame(drawLoop);
-
-    await new Promise((res, rej) => {
-      video.onended = res;
-      video.onerror = rej;
-      video.play().catch(rej);
     });
 
-    // Video ended — stop rAF, flush and finalize
-    cancelAnimationFrame(rafId);
-    // Draw final frame
-    ctx.clearRect(0, 0, targetW, targetH);
-    ctx.drawImage(video, 0, 0, targetW, targetH);
-
-    setProgress(98, 'Finalizing…', 'Writing output file…');
-    mediaRecorder.requestData();
-    setTimeout(() => { if (mediaRecorder.state !== 'inactive') mediaRecorder.stop(); }, 400);
-  }
-
-  function setProgress(pct, label, note) {
-    document.getElementById('progressBar').style.width = pct + '%';
-    document.getElementById('progressPct').textContent = pct + '%';
-    document.getElementById('progressStep').textContent = label;
-    document.getElementById('progressNote').textContent = note || '';
-  }
-
-  function resetBtn() {
-    document.getElementById('btnLabel').innerHTML = '⚡ Compress Video';
-    document.getElementById('compressBtn').disabled = false;
-  }
-
-  // ─────────────────────────────────────────────
-  // DOWNLOAD
-  // ─────────────────────────────────────────────
-  function downloadOutput() {
-    if (!outputURL) return;
-    const btn = document.getElementById('downloadBtn');
-    const a = document.createElement('a');
-    a.href = outputURL;
-    a.download = btn.dataset.name || 'compressed_video.mp4';
-    a.click();
-  }
-
-  // ─────────────────────────────────────────────
-  // RESET
-  // ─────────────────────────────────────────────
-  function resetAll() {
-    isCompressing = false; // stops processNext loop immediately
-    if (activeRafId) { cancelAnimationFrame(activeRafId); activeRafId = null; }
-    selectedFile = null;
-    outputBlob = null;
-    if (outputURL) URL.revokeObjectURL(outputURL);
-    outputURL = null;
-    chunks = [];
-
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-      try { mediaRecorder.stop(); } catch(_) {}
-    }
-
-    document.getElementById('fileInput').value = '';
-    document.getElementById('fileInfo').classList.remove('active');
-    document.getElementById('previewWrap').classList.remove('active');
-    document.getElementById('videoPreview').src = '';
-    dropZone.style.display = '';
-    document.getElementById('settingsPanel').classList.remove('active');
-    document.getElementById('progressWrap').classList.remove('active');
-    document.getElementById('outputWrap').classList.remove('active');
-    document.getElementById('estimateNote').textContent = '';
-    setProgress(0, '', '');
-    resetBtn();
-  }
-
-  // ─────────────────────────────────────────────
-  // FAQ ACCORDION
-  // ─────────────────────────────────────────────
-  function toggleFaq(btn) {
-    const item = btn.parentElement;
-    const answer = item.querySelector('.faq-a');
-    const isOpen = item.classList.contains('open');
-
-    // Close all
-    document.querySelectorAll('.faq-item').forEach(i => {
-      i.classList.remove('open');
-      i.querySelector('.faq-a').classList.remove('open');
+    ffmpeg.on('progress', ({ progress }) => {
+      window._ffProgress = Math.min(0.97, progress);
     });
 
-    if (!isOpen) {
-      item.classList.add('open');
-      answer.classList.add('open');
+    await ffmpeg.load({
+      coreURL: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js',
+      wasmURL: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm',
+    });
+
+    ffmpegInstance = ffmpeg;
+    ffmpegReady = true;
+    ffmpegLoading = false;
+    setFFStatus('ready', 'FFmpeg.wasm ready ✓');
+    enableButtons();
+    return true;
+  } catch(e) {
+    ffmpegLoading = false;
+    setFFStatus('error', 'FFmpeg failed to load — check your connection');
+    showToast('❌ FFmpeg failed to load. Refresh and try again.', 'error');
+    return false;
+  }
+}
+
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    if (document.querySelector(`script[src="${src}"]`)) { res(); return; }
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+function setFFStatus(state, msg) {
+  const dot = document.getElementById('ffDot');
+  dot.className = 'ffmpeg-dot ' + state;
+  document.getElementById('ffStatus').textContent = msg;
+}
+
+function enableButtons() {
+  document.getElementById('compressBtn').disabled = !singleFile;
+  document.getElementById('trimBtn').disabled = !trimFile;
+  document.getElementById('batchBtn').disabled = batchFiles.length === 0;
+}
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let singleFile = null, singleOutBlob = null, singleOutURL = null;
+let trimFile = null, trimOutBlob = null, trimOutURL = null;
+let batchFiles = [], batchOutputs = [];
+let isBusy = false;
+
+// ══════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+// SINGLE FILE
+// ══════════════════════════════════════════════
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('over'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('over'); const f = e.dataTransfer.files[0]; if (f && f.type.startsWith('video/')) handleSingle(f); else showToast('⚠️ Please drop a valid video file.','error'); });
+document.getElementById('fileInput').addEventListener('change', e => { if (e.target.files[0]) handleSingle(e.target.files[0]); });
+
+function handleSingle(file) {
+  singleFile = file;
+  document.getElementById('fileName').textContent = file.name;
+  document.getElementById('fileSize').textContent = fmtSize(file.size) + ' · ' + (file.type || 'video');
+  document.getElementById('fileInfo').classList.add('show');
+  dropZone.style.display = 'none';
+  const url = URL.createObjectURL(file);
+  document.getElementById('videoPreview').src = url;
+  document.getElementById('previewWrap').classList.add('show');
+  document.getElementById('settings').classList.add('show');
+  document.getElementById('outWrap').classList.remove('show');
+  document.getElementById('progWrap').classList.remove('show');
+  if (ffmpegReady) document.getElementById('compressBtn').disabled = false;
+  updateEstimate();
+}
+
+function resetSingle() {
+  singleFile = null; singleOutBlob = null;
+  if (singleOutURL) { URL.revokeObjectURL(singleOutURL); singleOutURL = null; }
+  document.getElementById('fileInput').value = '';
+  document.getElementById('fileInfo').classList.remove('show');
+  document.getElementById('previewWrap').classList.remove('show');
+  document.getElementById('videoPreview').src = '';
+  dropZone.style.display = '';
+  document.getElementById('settings').classList.remove('show');
+  document.getElementById('progWrap').classList.remove('show');
+  document.getElementById('outWrap').classList.remove('show');
+  document.getElementById('compressBtn').disabled = true;
+  setCompressBtn(false);
+}
+
+function updateQual() {
+  const v = document.getElementById('qualSlider').value;
+  document.getElementById('qualVal').textContent = v;
+  updateEstimate();
+}
+function updateScale() {
+  document.getElementById('scaleVal').textContent = document.getElementById('scaleSlider').value + '%';
+  updateEstimate();
+}
+function updateEstimate() {
+  if (!singleFile) return;
+  const crf = parseInt(document.getElementById('qualSlider').value);
+  const scale = parseInt(document.getElementById('scaleSlider').value) / 100;
+  const mute = document.getElementById('muteChk').checked;
+  // Rough estimate: higher CRF = smaller; scale reduces pixels quadratically
+  const crfFactor = Math.pow(0.93, crf - 18); // relative to crf 18 baseline
+  const scaleFactor = scale * scale;
+  const audioFactor = mute ? 0.92 : 1;
+  const est = singleFile.size * crfFactor * scaleFactor * audioFactor;
+  const savings = Math.max(0, Math.round((1 - est / singleFile.size) * 100));
+  document.getElementById('estimate').textContent = `Estimated: ~${fmtSize(Math.max(est,50000))} · ~${savings}% smaller`;
+}
+
+// ══════════════════════════════════════════════
+// COMPRESS (FFmpeg)
+// ══════════════════════════════════════════════
+async function runCompress() {
+  if (!singleFile || isBusy || !ffmpegReady) return;
+  isBusy = true;
+  setCompressBtn(true);
+  document.getElementById('outWrap').classList.remove('show');
+  document.getElementById('progWrap').classList.add('show');
+
+  const crf   = document.getElementById('qualSlider').value;
+  const scale = parseInt(document.getElementById('scaleSlider').value);
+  const fmt   = document.getElementById('fmtSel').value;
+  const fps   = document.getElementById('fpsSel').value;
+  const mute  = document.getElementById('muteChk').checked;
+  const outName = 'output.' + fmt;
+
+  try {
+    const { fetchFile } = window.FFmpegUtil || FFmpegUtilLib;
+    const ff = ffmpegInstance;
+
+    setProgress('progBar','progPct','progLabel','progNote', 5, 'Reading file…', '');
+    await ff.writeFile('input', await fetchFile(singleFile));
+
+    // Build FFmpeg args
+    const args = ['-i','input'];
+
+    // Video codec + CRF
+    if (fmt === 'webm') {
+      args.push('-c:v','libvpx','-crf',crf,'-b:v','0');
+    } else {
+      args.push('-c:v','libx264','-crf',crf,'-preset','fast','-movflags','+faststart');
+    }
+
+    // Scale
+    if (scale < 100) {
+      const scaleArg = `iw*${scale/100}:ih*${scale/100}`;
+      args.push('-vf', `scale=${scaleArg}`);
+    }
+
+    // FPS
+    if (fps) args.push('-r', fps);
+
+    // Audio
+    if (mute) {
+      args.push('-an');
+    } else {
+      if (fmt === 'webm') args.push('-c:a','libvorbis');
+      else args.push('-c:a','aac','-b:a','128k');
+    }
+
+    args.push('-y', outName);
+
+    setProgress('progBar','progPct','progLabel','progNote', 10, 'Encoding with FFmpeg…', 'H.264 re-encoding in progress…');
+
+    // Progress polling
+    window._ffProgress = 0;
+    const progInterval = setInterval(() => {
+      const p = Math.min(95, 10 + Math.round((window._ffProgress || 0) * 85));
+      setProgress('progBar','progPct','progLabel','progNote', p, 'Encoding…', `FFmpeg: ${Math.round((window._ffProgress||0)*100)}% complete`);
+    }, 300);
+
+    await ff.exec(args);
+    clearInterval(progInterval);
+
+    setProgress('progBar','progPct','progLabel','progNote', 97, 'Finalizing…', 'Reading output…');
+    const data = await ff.readFile(outName);
+    await ff.deleteFile('input');
+    await ff.deleteFile(outName);
+
+    const blob = new Blob([data.buffer], { type: fmt === 'webm' ? 'video/webm' : 'video/mp4' });
+    singleOutBlob = blob;
+    if (singleOutURL) URL.revokeObjectURL(singleOutURL);
+    singleOutURL = URL.createObjectURL(blob);
+
+    const baseName = singleFile.name.replace(/\.[^.]+$/, '');
+    document.getElementById('dlBtn').dataset.name = `${baseName}_vidshrynk.${fmt}`;
+    document.getElementById('origSz').textContent = fmtSize(singleFile.size);
+    document.getElementById('newSz').textContent  = fmtSize(blob.size);
+    const savings = Math.max(0, Math.round((1 - blob.size / singleFile.size) * 100));
+    document.getElementById('savingsBadge').textContent = `Saved ${savings}%`;
+
+    setProgress('progBar','progPct','progLabel','progNote', 100, 'Done!', '');
+    document.getElementById('progWrap').classList.remove('show');
+    document.getElementById('outWrap').classList.add('show');
+    showToast('✅ Compression complete!', 'success');
+  } catch(e) {
+    showToast('❌ Error: ' + e.message, 'error');
+    document.getElementById('progWrap').classList.remove('show');
+  }
+  isBusy = false;
+  setCompressBtn(false);
+}
+
+function downloadOut() {
+  if (!singleOutURL) return;
+  dl(singleOutURL, document.getElementById('dlBtn').dataset.name || 'vidshrynk_output.mp4');
+}
+
+function setCompressBtn(busy) {
+  document.getElementById('compressBtnLbl').innerHTML = busy
+    ? '<span class="spinner"></span> Compressing…'
+    : '⚡ Compress Video';
+  document.getElementById('compressBtn').disabled = busy || !singleFile || !ffmpegReady;
+}
+
+// ══════════════════════════════════════════════
+// TRIM
+// ══════════════════════════════════════════════
+const trimDZ = document.getElementById('trimDropZone');
+trimDZ.addEventListener('dragover', e => { e.preventDefault(); trimDZ.style.borderColor='rgba(127,255,107,.6)'; });
+trimDZ.addEventListener('dragleave', () => trimDZ.style.borderColor='rgba(127,255,107,.22)');
+trimDZ.addEventListener('drop', e => { e.preventDefault(); trimDZ.style.borderColor='rgba(127,255,107,.22)'; const f=e.dataTransfer.files[0]; if(f&&f.type.startsWith('video/'))handleTrim(f); });
+document.getElementById('trimInput').addEventListener('change', e => { if(e.target.files[0])handleTrim(e.target.files[0]); });
+
+function handleTrim(file) {
+  trimFile = file;
+  document.getElementById('trimFileName').textContent = file.name;
+  document.getElementById('trimFileSize').textContent = fmtSize(file.size);
+  document.getElementById('trimFileInfo').classList.add('show');
+  trimDZ.style.display = 'none';
+  const url = URL.createObjectURL(file);
+  const vp = document.getElementById('trimVideoPreview');
+  vp.src = url;
+  vp.onloadedmetadata = () => {
+    document.getElementById('trimDurNote').textContent = `Duration: ${fmtTime(vp.duration)} · Leave blank = full end`;
+    document.getElementById('trimEnd').placeholder = fmtTime(vp.duration);
+  };
+  document.getElementById('trimPreview').classList.add('show');
+  document.getElementById('trimSettings').classList.add('show');
+  document.getElementById('trimOutWrap').classList.remove('show');
+  document.getElementById('trimProgWrap').classList.remove('show');
+  if (ffmpegReady) document.getElementById('trimBtn').disabled = false;
+}
+
+function resetTrim() {
+  trimFile = null; trimOutBlob = null;
+  if (trimOutURL) { URL.revokeObjectURL(trimOutURL); trimOutURL = null; }
+  document.getElementById('trimInput').value = '';
+  document.getElementById('trimFileInfo').classList.remove('show');
+  document.getElementById('trimPreview').classList.remove('show');
+  document.getElementById('trimVideoPreview').src = '';
+  trimDZ.style.display = '';
+  document.getElementById('trimSettings').classList.remove('show');
+  document.getElementById('trimProgWrap').classList.remove('show');
+  document.getElementById('trimOutWrap').classList.remove('show');
+  document.getElementById('trimBtn').disabled = true;
+  setTrimBtn(false);
+}
+
+async function runTrim() {
+  if (!trimFile || isBusy || !ffmpegReady) return;
+  isBusy = true;
+  setTrimBtn(true);
+  document.getElementById('trimOutWrap').classList.remove('show');
+  document.getElementById('trimProgWrap').classList.add('show');
+
+  const startRaw = document.getElementById('trimStart').value.trim() || '0';
+  const endRaw   = document.getElementById('trimEnd').value.trim();
+  const mute     = document.getElementById('trimMuteChk').checked;
+  const compress = document.getElementById('trimCompressChk').checked;
+
+  try {
+    const { fetchFile } = window.FFmpegUtil || FFmpegUtilLib;
+    const ff = ffmpegInstance;
+
+    setProgress('trimProgBar','trimProgPct','trimProgLabel','trimProgNote', 5, 'Reading file…', '');
+    await ff.writeFile('input', await fetchFile(trimFile));
+
+    const args = ['-i','input','-ss', startRaw];
+    if (endRaw) args.push('-to', endRaw);
+
+    if (compress) {
+      args.push('-c:v','libx264','-crf','28','-preset','fast','-movflags','+faststart');
+    } else {
+      args.push('-c:v','copy'); // stream copy = instant, no re-encode
+    }
+
+    if (mute) { args.push('-an'); }
+    else {
+      if (compress) args.push('-c:a','aac','-b:a','128k');
+      else args.push('-c:a','copy');
+    }
+
+    args.push('-y','output.mp4');
+
+    setProgress('trimProgBar','trimProgPct','trimProgLabel','trimProgNote', 10, 'Trimming…', '');
+    window._ffProgress = 0;
+    const pi = setInterval(() => {
+      const p = Math.min(94, 10 + Math.round((window._ffProgress||0)*84));
+      setProgress('trimProgBar','trimProgPct','trimProgLabel','trimProgNote', p, 'Trimming…', `${Math.round((window._ffProgress||0)*100)}%`);
+    }, 300);
+
+    await ff.exec(args);
+    clearInterval(pi);
+
+    setProgress('trimProgBar','trimProgPct','trimProgLabel','trimProgNote', 97, 'Finalizing…', '');
+    const data = await ff.readFile('output.mp4');
+    await ff.deleteFile('input'); await ff.deleteFile('output.mp4');
+
+    const blob = new Blob([data.buffer], { type:'video/mp4' });
+    trimOutBlob = blob;
+    if (trimOutURL) URL.revokeObjectURL(trimOutURL);
+    trimOutURL = URL.createObjectURL(blob);
+
+    const baseName = trimFile.name.replace(/\.[^.]+$/,'');
+    document.getElementById('trimDlBtn').dataset.name = `${baseName}_trimmed.mp4`;
+    document.getElementById('trimOrigSz').textContent = fmtSize(trimFile.size);
+    document.getElementById('trimNewSz').textContent  = fmtSize(blob.size);
+
+    setProgress('trimProgBar','trimProgPct','trimProgLabel','trimProgNote', 100,'Done!','');
+    document.getElementById('trimProgWrap').classList.remove('show');
+    document.getElementById('trimOutWrap').classList.add('show');
+    showToast('✂️ Trim complete!','success');
+  } catch(e) {
+    showToast('❌ Error: ' + e.message,'error');
+    document.getElementById('trimProgWrap').classList.remove('show');
+  }
+  isBusy = false;
+  setTrimBtn(false);
+}
+
+function downloadTrimOut() {
+  if (!trimOutURL) return;
+  dl(trimOutURL, document.getElementById('trimDlBtn').dataset.name || 'trimmed.mp4');
+}
+
+function setTrimBtn(busy) {
+  document.getElementById('trimBtnLbl').innerHTML = busy
+    ? '<span class="spinner"></span> Trimming…'
+    : '✂️ Trim Video';
+  document.getElementById('trimBtn').disabled = busy || !trimFile || !ffmpegReady;
+}
+
+// ══════════════════════════════════════════════
+// BATCH
+// ══════════════════════════════════════════════
+const batchDrop = document.getElementById('batchDrop');
+batchDrop.addEventListener('dragover', e => { e.preventDefault(); batchDrop.style.borderColor='rgba(127,255,107,.6)'; });
+batchDrop.addEventListener('dragleave', () => batchDrop.style.borderColor='rgba(127,255,107,.18)');
+batchDrop.addEventListener('drop', e => { e.preventDefault(); batchDrop.style.borderColor='rgba(127,255,107,.18)'; addBatchFiles(e.dataTransfer.files); });
+document.getElementById('batchInput').addEventListener('change', e => { if(e.target.files.length) addBatchFiles(e.target.files); });
+
+function addBatchFiles(files) {
+  for (const f of files) {
+    if (f.type.startsWith('video/') && !batchFiles.find(b=>b.name===f.name&&b.size===f.size)) {
+      batchFiles.push(f);
+      batchOutputs.push({ blob:null, url:null, status:'waiting' });
     }
   }
+  renderBatchList();
+  document.getElementById('batchSettings').style.display = batchFiles.length ? 'block' : 'none';
+  if (ffmpegReady && batchFiles.length) document.getElementById('batchBtn').disabled = false;
+  document.getElementById('batchInput').value = '';
+}
 
-  // ─────────────────────────────────────────────
-  // TOAST
-  // ─────────────────────────────────────────────
-  function showToast(msg, type = '') {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast show ' + type;
-    setTimeout(() => t.className = 'toast', 3500);
+function removeBatchItem(i) {
+  if (batchOutputs[i].url) URL.revokeObjectURL(batchOutputs[i].url);
+  batchFiles.splice(i,1); batchOutputs.splice(i,1);
+  renderBatchList();
+  document.getElementById('batchSettings').style.display = batchFiles.length ? 'block' : 'none';
+  document.getElementById('batchBtn').disabled = batchFiles.length === 0;
+}
+
+function renderBatchList() {
+  const list = document.getElementById('batchList');
+  if (!batchFiles.length) { list.style.display='none'; return; }
+  list.style.display='flex';
+  list.innerHTML = batchFiles.map((f,i) => {
+    const o = batchOutputs[i];
+    const statusClass = o.status;
+    const statusLabel = {waiting:'Waiting',processing:'Processing…',done:'Done ✓',error:'Error'}[o.status];
+    return `<div class="batch-item">
+      <div class="bi-icon">🎬</div>
+      <div class="bi-meta">
+        <div class="bi-name">${escHtml(f.name)}</div>
+        <div class="bi-size">${fmtSize(f.size)}</div>
+      </div>
+      <span class="bi-status ${statusClass}">${statusLabel}</span>
+      ${o.status==='done' ? `<button class="bi-dl" style="display:inline-block" onclick="downloadBatchItem(${i})">⬇</button>` : ''}
+      ${o.status==='waiting' ? `<button class="bi-rm" onclick="removeBatchItem(${i})">✕</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function runBatch() {
+  if (!batchFiles.length || isBusy || !ffmpegReady) return;
+  isBusy = true;
+  setBatchBtn(true);
+
+  const crf   = document.getElementById('bQualSlider').value;
+  const scale = parseInt(document.getElementById('bScaleSlider').value);
+  const fmt   = document.getElementById('bFmtSel').value;
+  const mute  = document.getElementById('bMuteChk').checked;
+  const { fetchFile } = window.FFmpegUtil || FFmpegUtilLib;
+  const ff = ffmpegInstance;
+
+  for (let i = 0; i < batchFiles.length; i++) {
+    batchOutputs[i].status = 'processing';
+    renderBatchList();
+    document.getElementById('batchProgress').textContent = `Processing ${i+1} of ${batchFiles.length}: ${batchFiles[i].name}`;
+
+    try {
+      await ff.writeFile('input', await fetchFile(batchFiles[i]));
+      const outName = 'output.' + fmt;
+      const args = ['-i','input'];
+
+      if (fmt === 'webm') args.push('-c:v','libvpx','-crf',crf,'-b:v','0');
+      else args.push('-c:v','libx264','-crf',crf,'-preset','fast','-movflags','+faststart');
+
+      if (scale < 100) args.push('-vf',`scale=iw*${scale/100}:ih*${scale/100}`);
+      if (mute) args.push('-an');
+      else {
+        if (fmt==='webm') args.push('-c:a','libvorbis');
+        else args.push('-c:a','aac','-b:a','128k');
+      }
+      args.push('-y', outName);
+
+      await ff.exec(args);
+      const data = await ff.readFile(outName);
+      await ff.deleteFile('input'); await ff.deleteFile(outName);
+
+      const blob = new Blob([data.buffer], { type: fmt==='webm'?'video/webm':'video/mp4' });
+      batchOutputs[i].blob = blob;
+      batchOutputs[i].url  = URL.createObjectURL(blob);
+      batchOutputs[i].status = 'done';
+    } catch(e) {
+      batchOutputs[i].status = 'error';
+    }
+    renderBatchList();
   }
 
-  // ─────────────────────────────────────────────
-  // HELPERS
-  // ─────────────────────────────────────────────
-  function formatSize(bytes) {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-    return (bytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
-  }
+  document.getElementById('batchProgress').textContent = `✅ All ${batchFiles.length} videos processed!`;
+  showToast(`📦 Batch complete! ${batchFiles.length} videos compressed.`, 'success');
+  isBusy = false;
+  setBatchBtn(false);
+}
 
-  function formatTime(s) {
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60);
-    return `${m}:${sec.toString().padStart(2, '0')}`;
+function downloadBatchItem(i) {
+  const o = batchOutputs[i];
+  if (!o.url) return;
+  const baseName = batchFiles[i].name.replace(/\.[^.]+$/,'');
+  dl(o.url, `${baseName}_vidshrynk.${document.getElementById('bFmtSel').value}`);
+}
+
+function setBatchBtn(busy) {
+  document.getElementById('batchBtnLbl').innerHTML = busy
+    ? '<span class="spinner"></span> Processing Batch…'
+    : '📦 Compress All Videos';
+  document.getElementById('batchBtn').disabled = busy || batchFiles.length === 0 || !ffmpegReady;
+}
+
+// ══════════════════════════════════════════════
+// SHARED UTILS
+// ══════════════════════════════════════════════
+function setProgress(barId, pctId, labelId, noteId, pct, label, note) {
+  document.getElementById(barId).style.width = pct + '%';
+  document.getElementById(pctId).textContent = pct + '%';
+  document.getElementById(labelId).textContent = label;
+  document.getElementById(noteId).textContent = note || '';
+}
+
+function dl(url, name) {
+  const a = document.createElement('a'); a.href=url; a.download=name; a.click();
+}
+
+function fmtSize(b) {
+  if(b<1024)return b+' B';
+  if(b<1048576)return(b/1024).toFixed(1)+' KB';
+  if(b<1073741824)return(b/1048576).toFixed(2)+' MB';
+  return(b/1073741824).toFixed(2)+' GB';
+}
+
+function fmtTime(s) {
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=Math.floor(s%60);
+  return h>0?`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${m}:${String(sec).padStart(2,'0')}`;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  setTimeout(() => t.className='toast', 4000);
+}
+
+function toggleFaq(btn) {
+  const item=btn.parentElement, ans=item.querySelector('.faq-a'), open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').classList.remove('open')});
+  if(!open){item.classList.add('open');ans.classList.add('open');}
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+// Try to detect FFmpeg globals after scripts load
+function detectGlobals() {
+  if (window.FFmpegWASM) return { FFmpeg: window.FFmpegWASM.FFmpeg };
+  if (window.FFmpegLib) return { FFmpeg: window.FFmpegLib.FFmpeg };
+  // Some CDN versions expose as window.FFmpeg directly
+  if (window.FFmpeg && typeof window.FFmpeg === 'function') return { FFmpeg: window.FFmpeg };
+  return null;
+}
+
+// Override loadFFmpeg to use detected globals
+async function loadFFmpeg() {
+  if (ffmpegReady) return true;
+  if (ffmpegLoading) { while(ffmpegLoading) await sleep(200); return ffmpegReady; }
+  ffmpegLoading = true;
+  setFFStatus('loading','Loading FFmpeg.wasm engine…');
+
+  try {
+    // Load scripts
+    if (!window.FFmpegWASM) {
+      await loadScript('https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js');
+    }
+    if (!window.FFmpegUtil) {
+      await loadScript('https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js');
+    }
+
+    await sleep(200); // Let globals register
+
+    const FFmpegMod = window.FFmpegWASM || window.FFmpegLib || {};
+    const FFmpegClass = FFmpegMod.FFmpeg || window.FFmpeg;
+
+    if (!FFmpegClass) throw new Error('FFmpeg class not found after loading scripts');
+
+    const ff = new FFmpegClass();
+
+    ff.on('log', ({ message }) => {
+      const m = message.match(/time=(\d+):(\d+):([\d.]+)/);
+      if (m) window._ffCurrentTime = parseInt(m[1])*3600+parseInt(m[2])*60+parseFloat(m[3]);
+    });
+
+    ff.on('progress', ({ progress }) => { window._ffProgress = Math.min(0.97, isNaN(progress)?0:progress); });
+
+    setFFStatus('loading','Downloading FFmpeg core (~10MB, cached after first load)…');
+
+    await ff.load({
+      coreURL: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js',
+      wasmURL: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm',
+    });
+
+    ffmpegInstance = ff;
+    ffmpegReady = true;
+    ffmpegLoading = false;
+    setFFStatus('ready','FFmpeg.wasm ready ✓ — Real H.264 encoding');
+    enableButtons();
+    return true;
+  } catch(e) {
+    console.error('FFmpeg load error:', e);
+    ffmpegLoading = false;
+    setFFStatus('error','FFmpeg failed: ' + e.message + ' — check connection & refresh');
+    showToast('❌ FFmpeg failed to load. Please refresh.','error');
+    return false;
   }
+}
+
+window.addEventListener('load', () => { loadFFmpeg(); });
 </script>
-
 </body>
 </html>
